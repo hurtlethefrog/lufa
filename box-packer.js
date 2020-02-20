@@ -2,11 +2,11 @@
 
 let order = {
   40: {
-    quantity: 1,
+    quantity: 5,
     volume: 12000
   },
   33: {
-    quantity: 4,
+    quantity: 6,
     volume: 2500
   },
   35: {
@@ -28,11 +28,12 @@ let order = {
 };
 
 const orderFilled = o => {
+  console.log("is order filled?")
   let array = [];
   for (let ids in o) {
     array.push(o[ids].quantity);
   }
-  if (array.every(ele => ele == 0)) {
+  if (array.every(ele => ele === 0)) {
     return true;
   } else {
     return false;
@@ -48,24 +49,30 @@ const currentAvailableVolumes = o => {
   return Math.min(...output);
 };
 
+const boxFull = (max, box, min) => {
+  if (box.vol + min > max) {
+    return true;
+  } else return false;
+};
+
 const boxFiller = ord => {
   let modOrder = ord;
-  let emptyBox = {
-    vol: 0,
-    contents: {}
-  };
+  let maxVol = 15000;
   let currentBox = {
     vol: 0,
     contents: {}
   };
   let boxes = [];
-  while (orderFilled(modOrder) == false) {
+  while (orderFilled(modOrder) === false) {
     for (let ids in modOrder) {
-      console.log("last operation?");
-      if (15000 - currentBox.vol > currentAvailableVolumes(modOrder)) {
+      if (boxFull(maxVol, currentBox, currentAvailableVolumes(modOrder))) {
+        boxes.push(currentBox.contents);
+        currentBox.vol = 0;
+        currentBox.contents = {};
+      } else if (maxVol - currentBox.vol >= currentAvailableVolumes(modOrder)) {
         if (
           modOrder[ids].quantity > 0 &&
-          currentBox.vol + modOrder[ids].volume <= 15000
+          currentBox.vol + modOrder[ids].volume <= maxVol
         ) {
           currentBox.vol += modOrder[ids].volume;
           modOrder[ids].quantity -= 1;
@@ -79,10 +86,13 @@ const boxFiller = ord => {
         }
       }
     }
-      boxes.push(currentBox.contents);
-      currentBox = emptyBox;
   }
   return boxes;
 };
-
-console.log(boxFiller(order));
+let sorted = boxFiller(order)
+let index = 1
+console.log("The order will be placed into", sorted.length, "boxes");
+for (let box of sorted) {
+  console.log("in box", index, "we will place", box)
+  index ++
+}
