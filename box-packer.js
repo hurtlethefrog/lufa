@@ -28,7 +28,6 @@ let order = {
 };
 
 const orderFilled = o => {
-  console.log("is order filled?")
   let array = [];
   for (let ids in o) {
     array.push(o[ids].quantity);
@@ -55,8 +54,8 @@ const boxFull = (max, box, min) => {
   } else return false;
 };
 
-const boxFiller = ord => {
-  let modOrder = ord;
+const boxFiller = o => {
+  let modOrder = o;
   let maxVol = 15000;
   let currentBox = {
     vol: 0,
