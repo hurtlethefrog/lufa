@@ -1,25 +1,36 @@
 <?php
 $created_order = array(
-
+  40 => array(
+    'quantity'=> 5,
+    'volume'=> 2500
+  ),
+  35 => array(
+    'quantity'=> 10,
+    'volume' => 10000
+  ),
+  22 => array(
+    'quantity'=> 5,
+    'volume'=> 500
+  )
 );
-echo "\nPlease enter the product id follwed my the quantity required for this order then the volume of one product (ex: 40 3 12000)\nHow many item types are in your order?:";
-$handle = fopen("php://stdin", "r");
-$line = fgets($handle);
-$order_size = $line;
-    while (count($created_order) < (int)$order_size) {
-        echo "Item(id quantity volume):";
-        $line = fgets($handle);
-        $entry = explode(" ", $line);
-        $created_order[$entry[0]] = array(
-        'quantity' => (int)$entry[1],
-        'volume' => (int)$entry[2]
-    );
-    };
+// echo "\nPlease enter the product id follwed my the quantity required for this order then the volume of one product (ex: 40 3 12000)\nHow many item types are in your order?:";
+// $handle = fopen("php://stdin", "r");
+// $line = fgets($handle);
+// $order_size = $line;
+//     while (count($created_order) < (int)$order_size) {
+//         echo "Item(id quantity volume):";
+//         $line = fgets($handle);
+//         $entry = explode(" ", $line);
+//         $created_order[$entry[0]] = array(
+//         'quantity' => (int)$entry[1],
+//         'volume' => (int)$entry[2]
+//     );
+//     };
 
-fclose($handle);
-echo "\n";
-echo "Sorting boxes...\n";
-var_dump($created_order);
+// fclose($handle);
+// echo "\n";
+// echo "Sorting boxes...\n";
+// var_dump($created_order);
 
 function order_filled($o){
     foreach ($o as $ids) {
@@ -76,6 +87,7 @@ function exe($o){
         }
     }
     array_push($boxes, $current_box['contents']);
+    echo "here's the return\n";
     var_dump($boxes);
     
     return $boxes;
@@ -88,7 +100,7 @@ echo "\nThe order will be placed into ", count($sorted), " boxes\n";
 foreach ($sorted as $box) {
   echo "\nIn box ", $index, " we will place\n";
   foreach($box as $item) {
-    echo $item, " units of id: ", $box[$item];
+    echo $item, " units of id: ", $box[$item], "\n";
   };
   $index ++;
 };
