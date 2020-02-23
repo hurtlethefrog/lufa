@@ -25,6 +25,7 @@ $created_order = array(
     'volume'=> 500
   )
 );
+
 // echo "\nPlease enter the product id follwed my the quantity required for this order then the volume of one product (ex: 40 3 12000)\nHow many item types are in your order?:";
 // $handle = fopen("php://stdin", "r");
 // $line = fgets($handle);
@@ -78,6 +79,10 @@ function exe($o){
       'volume'=> 0,
       'contents'=> array()
     );
+  
+  // Fill one box before moving on to the nect one, use orderfilled and box filled helpers
+  
+  
     $boxes = array();
     while (order_filled($mod_order) == false) {
         foreach ($mod_order as $ids => $val) {
