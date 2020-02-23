@@ -22,7 +22,6 @@ echo "Sorting boxes...\n";
 var_dump($created_order);
 
 function order_filled($o){
-    // echo "while loop";
     foreach ($o as $ids) {
         // echo $ids['quantity'];
         if ($ids['quantity'] != 0) {
@@ -39,12 +38,10 @@ function min_volume($o){
             array_push($volumes, $ids['volume']);
         };
     };
-    echo "min vol\n", min($volumes);
     return min($volumes);
 };
 
 function box_full($max, $box, $min){
-    // echo 'max',$max, 'boxvol',$box['volume'], 'min',$min;
     if ((int)$box['volume'] + (int)$min > (int)$max) {
         return true;
     };
@@ -52,9 +49,8 @@ function box_full($max, $box, $min){
 };
 
 function exe($o){
-    echo "running exe";
     $mod_order = $o;
-    $max_vol = 5000;
+    $max_vol = 15000;
     $current_box = array(
       'volume'=> 0,
       'contents'=> array()
@@ -66,14 +62,10 @@ function exe($o){
                 array_push($boxes, $current_box['contents']);
                 $current_box['volume'] = 0;
                 $current_box['contents'] = array();
-                var_dump($boxes);
             } elseif ($max_vol - $current_box['volume'] >= min_volume($mod_order)) {
-                // var_dump( $val);
                 if ($val['quantity'] > 0 && $current_box['volume'] + $val['volume'] <= $max_vol) {
-                    // echo 'line 72';
                     $current_box['volume'] += $val['volume'];
-                    $val['quantity'] -= 1;
-                    // echo $current_box['volume'];
+                    $mod_order[$ids]['quantity'] -= 1;
                     if (!array_key_exists($ids, $current_box['contents'])) {
                         $current_box['contents'][$ids] = 1;
                     } else {
@@ -83,10 +75,21 @@ function exe($o){
             }
         }
     }
-    echo $boxes;
+    array_push($boxes, $current_box['contents']);
+    var_dump($boxes);
+    
     return $boxes;
 };
 
-exe($created_order);
 
+$sorted = exe($created_order);
+$index = 1;
+echo "\nThe order will be placed into ", count($sorted), " boxes\n";
+foreach ($sorted as $box) {
+  echo "\nIn box ", $index, " we will place\n";
+  foreach($box as $item) {
+    echo $item, " units of id: ", $box[$item];
+  };
+  $index ++;
+};
 ?>
